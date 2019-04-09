@@ -1,0 +1,1 @@
+docker build -t ziruiryanwang/pointnet2-torch .
