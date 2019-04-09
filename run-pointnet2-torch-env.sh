@@ -1,0 +1,1 @@
+docker run -it --rm --runtime=nvidia -v /home/ryan/repos-developing/Pointnet2_PyTorch:/home/ryan/repos-developing/Pointnet2_PyTorch ziruiryanwang/pointnet2-torch
