@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
     lr_scheduler = lr_sched.LambdaLR(optimizer, lr_lambda=lr_lbmd, last_epoch=it)
     bnm_scheduler = pt_utils.BNMomentumScheduler(
-        model, bn_lambda=bn_lbmd, last_epoch=it
+        model, bn_lambda=bnm_lmbd, last_epoch=it
     )
 
     it = max(it, 0)  # for the initialize value of `trainer.train`
