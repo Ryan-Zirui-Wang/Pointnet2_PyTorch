@@ -13,7 +13,8 @@ import h5py
 import subprocess
 import shlex
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname("/media/ryan/hdd/")
 
 
 def _get_data_files(list_filename):
@@ -23,7 +24,8 @@ def _get_data_files(list_filename):
 
 def _load_data_file(name):
     f = h5py.File(name)
-    data = f["data"][:]
+    data = f["data"][:, :, 0:3]
+    # data = f["data"][:]
     label = f["label"][:]
     return data, label
 
