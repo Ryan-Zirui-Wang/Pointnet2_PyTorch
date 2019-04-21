@@ -14,7 +14,8 @@ from pointnet2.utils.pointnet2_modules import PointnetFPModule, PointnetSAModule
 
 
 def model_fn_decorator(criterion):
-    ModelReturn = namedtuple("ModelReturn", ["preds", "loss", "acc"])
+    # ModelReturn = namedtuple("ModelReturn", ["preds", "loss", "acc"])
+    ModelReturn = namedtuple("ModelReturn", ["preds", "loss", "acc", "features"])
 
     def model_fn(model, data, epoch=0, eval=False):
         with torch.set_grad_enabled(not eval):
@@ -22,13 +23,16 @@ def model_fn_decorator(criterion):
             inputs = inputs.to("cuda", non_blocking=True)
             labels = labels.to("cuda", non_blocking=True)
 
-            preds = model(inputs)
+            preds, features = model(inputs)
+            # preds = model(inputs)
+
             loss = criterion(preds.view(labels.numel(), -1), labels.view(-1))
 
             _, classes = torch.max(preds, -1)
             acc = (classes == labels).float().sum() / labels.numel()
 
-        return ModelReturn(preds, loss, {"acc": acc.item(), "loss": loss.item()})
+        # return ModelReturn(preds, loss, {"acc": acc.item(), "loss": loss.item()})
+        return ModelReturn(preds, loss, {"acc": acc.item(), "loss": loss.item()}, features)
 
     return model_fn
 
@@ -101,6 +105,7 @@ class Pointnet2MSG(nn.Module):
         )
         c_out_3 = 512 + 512
 
+        # feature propagation module
         self.FP_modules = nn.ModuleList()
         self.FP_modules.append(PointnetFPModule(mlp=[256 + input_channels, 128, 128]))
         self.FP_modules.append(PointnetFPModule(mlp=[512 + c_out_0, 256, 256]))
@@ -146,7 +151,8 @@ class Pointnet2MSG(nn.Module):
                 l_xyz[i - 1], l_xyz[i], l_features[i - 1], l_features[i]
             )
 
-        return self.FC_layer(l_features[0]).transpose(1, 2).contiguous()
+        return self.FC_layer(l_features[0]).transpose(1, 2).contiguous(), l_features[0]
+        # return self.FC_layer(l_features[0]).transpose(1, 2).contiguous()        
 
 
 if __name__ == "__main__":

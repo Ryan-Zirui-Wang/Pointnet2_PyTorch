@@ -13,6 +13,7 @@ from collections import namedtuple
 from pointnet2.utils.pointnet2_modules import PointnetSAModuleMSG, PointnetSAModule
 
 
+# return a function that runs model forward and compute loss(criterion)
 def model_fn_decorator(criterion):
     ModelReturn = namedtuple("ModelReturn", ["preds", "loss", "acc"])
 
@@ -119,4 +120,10 @@ class Pointnet2MSG(nn.Module):
         for module in self.SA_modules:
             xyz, features = module(xyz, features)
 
+        self.features128 = features
+        # print(features.shape)
+
         return self.FC_layer(features.squeeze(-1))
+
+    def get_features(self):
+        return self.features128
