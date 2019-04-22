@@ -121,7 +121,6 @@ class Pointnet2MSG(nn.Module):
             xyz, features = module(xyz, features)
 
         self.features128 = features
-        # print(features.shape)
 
         return self.FC_layer(features.squeeze(-1))
 
