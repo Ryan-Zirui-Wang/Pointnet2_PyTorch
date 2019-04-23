@@ -16,3 +16,7 @@ pointnet2.egg-info/
 .tox/
 .mypy_cache
 **/*.pyc
+
+\.ipynb_checkpoints/
+
+\.vscode/
