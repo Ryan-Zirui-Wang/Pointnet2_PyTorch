@@ -9,3 +9,5 @@ RUN pip install matplotlib jupyter
 RUN apt-get update && apt-get install -y \
     wget \ 
     unzip
+
+ENTRYPOINT pip install -e . && bash
